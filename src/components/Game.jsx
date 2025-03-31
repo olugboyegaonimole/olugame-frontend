@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const Game = ({ level }) => {
+const Game = ({ level, onReturnToHome }) => {
   const [words, setWords] = useState([]);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -9,7 +9,7 @@ const Game = ({ level }) => {
 
   useEffect(() => {
     // Fetch the words for the selected level
-    fetch(`https://olugame-backend.onrender.com/words/${level}`)
+    fetch(`https://your-backend.onrender.com/words/${level}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.error) {
@@ -51,7 +51,7 @@ const Game = ({ level }) => {
     return (
       <div className="game-over">
         <h2>Game Over! Final Score: {score}/{words.length}</h2>
-        <button onClick={handleRestart}>🏠 Return to Home</button>
+        <button onClick={onReturnToHome}>🏠 Return to Home</button>
       </div>
     );
   }
