@@ -1,81 +1,92 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
-const Game = ({ difficulty, onGameOver }) => {
-  const [questions, setQuestions] = useState([]);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+const Game = ({ level }) => {
+  const [words, setWords] = useState([]);
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [score, setScore] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const [feedback, setFeedback] = useState("");
+  const [selectedOption, setSelectedOption] = useState(null);
   const [gameOver, setGameOver] = useState(false);
 
-useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/get_words/${difficulty}`)
+  useEffect(() => {
+    // Fetch the words for the selected level
+    fetch(`http://localhost:8000/words/${level}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log("Fetched Questions:", data); // Debugging line
-        setQuestions(data);
-      })
-      .catch((error) => console.error("Error fetching data:", error));
-  }, [difficulty]);
+        if (data.error) {
+          console.error(data.error);
+        } else {
+          setWords(data);
+        }
+      });
+  }, [level]);
 
-  const handleAnswerClick = (answer) => {
-    if (gameOver || !questions.length) return;
+  const handleOptionSelect = (option) => {
+    if (selectedOption !== null) return; // Prevent multiple selections
 
-    const currentQuestion = questions[currentQuestionIndex];
-
-    if (!currentQuestion || !currentQuestion.correct_answer) {
-      setFeedback("Error: Correct answer missing!");  // Debugging check
-      return;
+    const correctAnswer = words[currentWordIndex].answer;
+    if (option === correctAnswer) {
+      setScore(score + 1);
     }
 
-    if (answer === currentQuestion.correct_answer) {
-      setScore((prevScore) => prevScore + 1);
-      setFeedback("✅ Correct!");
-    } else {
-      setFeedback(`❌ Wrong! The correct answer was: ${currentQuestion.correct_answer}`);
-    }
-
-    setSelectedAnswer(answer);
-
-    setTimeout(() => {
-      if (currentQuestionIndex < 9) {
-        setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
-        setSelectedAnswer(null);
-        setFeedback("");
-      } else {
-        setGameOver(true);
-        onGameOver(score + (answer === currentQuestion.correct_answer ? 1 : 0)); // Send correct final score
-      }
-    }, 1000);
+    setSelectedOption(option);
   };
+
+  const handleNextQuestion = () => {
+    if (currentWordIndex + 1 < words.length) {
+      setCurrentWordIndex(currentWordIndex + 1);
+      setSelectedOption(null);
+    } else {
+      setGameOver(true);
+    }
+  };
+
+  const handleRestart = () => {
+    setCurrentWordIndex(0);
+    setScore(0);
+    setGameOver(false);
+    setSelectedOption(null);
+  };
+
+  if (gameOver) {
+    return (
+      <div className="game-over">
+        <h2>Game Over! Final Score: {score}/{words.length}</h2>
+        <button onClick={handleRestart}>🏠 Return to Home</button>
+      </div>
+    );
+  }
+
+  if (words.length === 0) {
+    return <div>Loading...</div>;
+  }
+
+  const currentWord = words[currentWordIndex];
+  const { word, options } = currentWord;
 
   return (
     <div className="game-container">
-      {gameOver ? (
-        <div className="game-over">
-          <h2>Game Over! Final Score: {score}/10</h2>
-          <button onClick={() => window.location.reload()}>🏠 Return to Home</button>
+      <h2>{level}</h2>
+      <div className="word-container">
+        <h3>What is a synonym for: {word}?</h3>
+        <div className="options">
+          {options.map((option, index) => (
+            <button
+              key={index}
+              onClick={() => handleOptionSelect(option)}
+              disabled={selectedOption !== null}
+              className={selectedOption === option ? (option === currentWord.answer ? 'correct' : 'incorrect') : ''}
+            >
+              {option}
+            </button>
+          ))}
         </div>
-      ) : questions.length > 0 ? (
-        <div>
-          <h2>Question {currentQuestionIndex + 1} of 10</h2>
-          <h3>{questions[currentQuestionIndex].word}</h3>
-          <div className="options">
-            {questions[currentQuestionIndex].options.map((option, index) => (
-              <button
-                key={index}
-                className={selectedAnswer === option ? "selected" : ""}
-                onClick={() => handleAnswerClick(option)}
-                disabled={selectedAnswer !== null}
-              >
-                {option}
-              </button>
-            ))}
-          </div>
-          {feedback && <p className="feedback">{feedback}</p>}
-        </div>
-      ) : (
-        <p>Loading questions...</p>
+      </div>
+      <div className="progress">
+        <p>Question {currentWordIndex + 1} of {words.length}</p>
+        <p>Score: {score}</p>
+      </div>
+      {selectedOption !== null && (
+        <button onClick={handleNextQuestion}>Next Question</button>
       )}
     </div>
   );
