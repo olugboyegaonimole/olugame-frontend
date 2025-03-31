@@ -1,20 +1,33 @@
-import React, { useState } from "react";
-import Game from "./components/Game";
+import React, { useState } from 'react';
+import Game from './components/Game';
+import './styles.css';
 
 const App = () => {
-  const [difficulty, setDifficulty] = useState(null);
+  const [selectedLevel, setSelectedLevel] = useState(null);
+
+  const handleLevelSelect = (level) => {
+    setSelectedLevel(level);
+  };
 
   return (
-    <div className="app">
-      {difficulty ? (
-        <Game difficulty={difficulty} onRestart={() => setDifficulty(null)} />
-      ) : (
-        <div className="home">
-          <h1>Synonym Game</h1>
-          <button onClick={() => setDifficulty("easy")}>Easy</button>
-          <button onClick={() => setDifficulty("medium")}>Medium</button>
-          <button onClick={() => setDifficulty("hard")}>Hard</button>
+    <div className="app-container">
+      {!selectedLevel ? (
+        <div className="level-selection">
+          <h1>Vocabulary Game</h1>
+          <p>Select a difficulty level to start playing:</p>
+          <div className="level-buttons">
+            {Array.from({ length: 7 }, (_, i) => (
+              <button
+                key={i + 1}
+                onClick={() => handleLevelSelect(`Level ${i + 1}`)}
+              >
+                Level {i + 1}
+              </button>
+            ))}
+          </div>
         </div>
+      ) : (
+        <Game level={selectedLevel} />
       )}
     </div>
   );
