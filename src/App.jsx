@@ -9,6 +9,10 @@ const App = () => {
     setSelectedLevel(level);
   };
 
+  const handleReturnToHome = () => {
+    setSelectedLevel(null); // Reset to show the level selection screen
+  };
+
   return (
     <div className="app-container">
       {!selectedLevel ? (
@@ -27,7 +31,7 @@ const App = () => {
           </div>
         </div>
       ) : (
-        <Game level={selectedLevel} />
+        <Game level={selectedLevel} onReturnToHome={handleReturnToHome} />
       )}
     </div>
   );
