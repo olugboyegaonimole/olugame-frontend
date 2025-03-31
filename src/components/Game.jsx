@@ -9,7 +9,7 @@ const Game = ({ level }) => {
 
   useEffect(() => {
     // Fetch the words for the selected level
-    fetch(`http://localhost:8000/words/${level}`)
+    fetch(`https://olugame-frontend.onrender.com/words/${level}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.error) {
