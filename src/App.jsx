@@ -17,7 +17,7 @@ const App = () => {
     <div className="app-container">
       {!selectedLevel ? (
         <div className="level-selection">
-          <h1>Vocabulary Game</h1>
+          <h1>Synonyms!</h1>
           <p>Select a difficulty level to start playing:</p>
           <div className="level-buttons">
             {Array.from({ length: 7 }, (_, i) => (
