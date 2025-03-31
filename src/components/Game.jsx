@@ -9,7 +9,7 @@ const Game = ({ level, onReturnToHome }) => {
 
   useEffect(() => {
     // Fetch the words for the selected level
-    fetch(`https://your-backend.onrender.com/words/${level}`)
+    fetch(`https://olugame-backend.onrender.com/words/${level}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.error) {
@@ -67,7 +67,7 @@ const Game = ({ level, onReturnToHome }) => {
     <div className="game-container">
       <h2>{level}</h2>
       <div className="word-container">
-        <h3>What is a synonym for: {word}?</h3>
+        <h3>{word}</h3>
         <div className="options">
           {options.map((option, index) => (
             <button
