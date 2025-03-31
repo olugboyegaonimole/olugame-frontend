@@ -1,37 +1,38 @@
-/* Game Styles */
-.game-container {
+/* styles.css */
+
+/* General styles */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f9; /* Light background color */
+  color: #333; /* Dark text color */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
   text-align: center;
-  padding: 20px;
 }
 
-.word-container {
-  margin: 20px;
+h1, h2, h3 {
+  font-weight: bold;
+  color: #333;
 }
 
-.options button {
-  margin: 10px;
+button {
   padding: 10px 20px;
-  font-size: 18px;
+  font-size: 16px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
   cursor: pointer;
+  margin: 10px;
+  transition: background-color 0.3s ease;
 }
 
-.correct {
-  background-color: green;
-  color: white;
-}
-
-.incorrect {
-  background-color: red;
-  color: white;
-}
-
-.progress {
-  margin-top: 20px;
-}
-
-.game-over {
-  text-align: center;
-  margin-top: 50px;
+button:hover {
+  background-color: #45a049;
 }
 
 button:disabled {
@@ -39,6 +40,80 @@ button:disabled {
   cursor: not-allowed;
 }
 
-button {
-  font-size: 20px;
+/* Home page styles */
+.app-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.level-selection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.level-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.level-buttons button {
+  width: 120px;
+  margin: 10px;
+}
+
+/* Game page styles */
+.game-container {
+  width: 90%;
+  max-width: 600px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.word-container {
+  margin-bottom: 20px;
+}
+
+.options {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.options button {
+  width: 150px;
+  margin: 5px;
+}
+
+.progress {
+  margin-top: 20px;
+}
+
+.game-over {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.game-over button {
+  margin-top: 20px;
+}
+
+/* Loading state */
+.loading {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
 }
